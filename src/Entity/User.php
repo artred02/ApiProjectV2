@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -14,7 +15,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ApiResource(
-    operations: [new Post()],
+    operations: [new Post(), new Get()],
     normalizationContext: ['groups' => ['read']],
     denormalizationContext: ['groups' => ['write']],
 )]
@@ -28,6 +29,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['read', 'write'])]
     #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
+
+    #[Groups(['read', 'write'])]
+    #[ORM\Column(length: 255)]
+    private ?string $name = null;
 
     #[ORM\Column]
     private array $roles = [];
@@ -46,6 +51,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups('read')]
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Posts::class)]
     private Collection $posts;
+
 
     public function __construct()
     {
@@ -179,6 +185,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $post->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
 
         return $this;
     }
