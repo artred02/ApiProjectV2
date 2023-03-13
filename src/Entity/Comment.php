@@ -25,7 +25,7 @@ class Comment
     #[ORM\Column(type: Types::TEXT)]
     private ?string $content = null;
 
-    #[Groups('read')]
+    #[Groups(['read', 'write'])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $creationDate = null;
 
@@ -62,7 +62,7 @@ class Comment
 
     public function setCreationDate(\DateTimeInterface $creationDate): self
     {
-        $this->creationDate = new \DateTime();
+        $this->creationDate = $creationDate;
 
         return $this;
     }
