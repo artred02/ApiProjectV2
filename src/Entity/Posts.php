@@ -3,6 +3,15 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use App\Controller\GetterCommentsByPostController;
+use App\Controller\GetterCommentsOfUserController;
+use App\Controller\GetterPostOfCommentController;
+use App\Controller\GetterPostsOfUserController;
 use App\Repository\PostsRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -12,6 +21,19 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: PostsRepository::class)]
 #[ApiResource(
+    operations: [
+        new GetCollection(
+            uriTemplate: '/posts/user/{id}',
+            controller: GetterPostsOfUserController::class,
+            name: 'postsOfUser'
+        ),
+        new Get(),
+        new Post(),
+        new Delete(),
+        new GetCollection(),
+        new Patch(),
+
+    ],
     normalizationContext: ['groups' => ['read']],
     denormalizationContext: ['groups' => ['write']]
 )]

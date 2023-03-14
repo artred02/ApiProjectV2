@@ -46,6 +46,9 @@ class Comment
     #[Groups('read')]
     private ?int $id = null;
 
+    #[Groups('read')]
+    private ?int $postId = null;
+
     #[Groups(['read', 'write'])]
     #[ORM\Column(type: Types::TEXT)]
     private ?string $content = null;
@@ -54,7 +57,6 @@ class Comment
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $creationDate = null;
 
-    #[Groups(['write'])]
     #[ORM\ManyToOne(inversedBy: 'comments')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Posts $post = null;
@@ -66,6 +68,11 @@ class Comment
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getPostId(): ?int
+    {
+        return $this->post->getId();
     }
 
     public function getContent(): ?string

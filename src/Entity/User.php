@@ -24,6 +24,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups('read')]
     private ?int $id = null;
 
     #[Groups(['read', 'write'])]
@@ -47,7 +48,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Comment::class)]
     private Collection $comments;
 
-    #[Groups('read')]
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Posts::class)]
     private Collection $posts;
 
