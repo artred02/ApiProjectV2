@@ -3,6 +3,13 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\GetCollection;
+use App\Controller\GetterCommentsByPostController;
+use App\Controller\GetterCommentsOfUserController;
 use App\Repository\CommentRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -10,8 +17,26 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
 #[ApiResource(
+    operations: [
+        new GetCollection(
+            uriTemplate: '/comments/post/{id}',
+            controller: GetterCommentsByPostController::class,
+            name: 'commentsByPosts'
+        ),
+        new GetCollection(
+            uriTemplate: '/comments/user/{id}',
+            controller: GetterCommentsOfUserController::class,
+            name: 'commentsOfUser'
+        ),
+        new Get(),
+        new Post(),
+        new Delete(),
+        new GetCollection(),
+        new Patch(),
+
+    ],
     normalizationContext: ['groups' => ['read']],
-    denormalizationContext: ['groups' => ['write']]
+    denormalizationContext: ['groups' => ['write']],
 )]
 class Comment
 {
